@@ -597,7 +597,10 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
           simp [hv]
         · simp
       simp [hn, Ne.symm hn]
-      exact neg_eq_of_eq_neg hs
+      have h2 : -(∑ i : Fin P.natDegree,
+          if (i : ℕ) = n then -P.coeff i else 0) = P.coeff n := by
+        rw [hs]; ring
+      exact h2
     · have hgt : P.natDegree < n := by omega
       have hc : P.coeff n = 0 := Polynomial.coeff_eq_zero_of_natDegree_lt hgt
       have hz : (∑ i : Fin P.natDegree,

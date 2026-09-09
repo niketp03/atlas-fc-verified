@@ -22,19 +22,30 @@ namespace AtlasCompare.Oqp35
 
 /-! ## Check 1 — every shared definition agrees definitionally. -/
 
-example : Atlas.OpenQuantumProblem35.Config = OpenQuantumProblem35.Config := rfl
-example : Atlas.OpenQuantumProblem35.StateVector = OpenQuantumProblem35.StateVector := rfl
-example : Atlas.OpenQuantumProblem35.mkStateVector = OpenQuantumProblem35.mkStateVector := rfl
-example : Atlas.OpenQuantumProblem35.IsNormalized = OpenQuantumProblem35.IsNormalized := rfl
-example : Atlas.OpenQuantumProblem35.permuteConfig = OpenQuantumProblem35.permuteConfig := rfl
-example : Atlas.OpenQuantumProblem35.permuteState = OpenQuantumProblem35.permuteState := rfl
-example : Atlas.OpenQuantumProblem35.IsConstantConfig = OpenQuantumProblem35.IsConstantConfig := rfl
-example : Atlas.OpenQuantumProblem35.combineFirst = OpenQuantumProblem35.combineFirst := rfl
-example : Atlas.OpenQuantumProblem35.reducedDensityFirst = OpenQuantumProblem35.reducedDensityFirst := rfl
-example : Atlas.OpenQuantumProblem35.maximallyMixed = OpenQuantumProblem35.maximallyMixed := rfl
-example : Atlas.OpenQuantumProblem35.HasMaximallyMixedFirstReduction = OpenQuantumProblem35.HasMaximallyMixedFirstReduction := rfl
-example : Atlas.OpenQuantumProblem35.IsAME = OpenQuantumProblem35.IsAME := rfl
-example : Atlas.OpenQuantumProblem35.ExistsAME = OpenQuantumProblem35.ExistsAME := rfl
+-- Each of these is stated *applied*: most carry implicit `{n d : ℕ}`, which an
+-- unapplied equation leaves undetermined.
+example (n d : ℕ) : Atlas.OpenQuantumProblem35.Config n d = OpenQuantumProblem35.Config n d := rfl
+example (n d : ℕ) : Atlas.OpenQuantumProblem35.StateVector n d = OpenQuantumProblem35.StateVector n d := rfl
+example (n d : ℕ) (ψ : OpenQuantumProblem35.Config n d → ℂ) :
+    Atlas.OpenQuantumProblem35.mkStateVector ψ = OpenQuantumProblem35.mkStateVector ψ := rfl
+example (n d : ℕ) (ψ : OpenQuantumProblem35.StateVector n d) :
+    Atlas.OpenQuantumProblem35.IsNormalized ψ = OpenQuantumProblem35.IsNormalized ψ := rfl
+example (n d : ℕ) (π : Equiv.Perm (Fin n)) (x : OpenQuantumProblem35.Config n d) :
+    Atlas.OpenQuantumProblem35.permuteConfig π x = OpenQuantumProblem35.permuteConfig π x := rfl
+example (n d : ℕ) (π : Equiv.Perm (Fin n)) (ψ : OpenQuantumProblem35.StateVector n d) :
+    Atlas.OpenQuantumProblem35.permuteState π ψ = OpenQuantumProblem35.permuteState π ψ := rfl
+example (n d : ℕ) (x : OpenQuantumProblem35.Config n d) :
+    Atlas.OpenQuantumProblem35.IsConstantConfig x = OpenQuantumProblem35.IsConstantConfig x := rfl
+example (n d m : ℕ) (hm : m ≤ n) (x : OpenQuantumProblem35.Config m d) (y : OpenQuantumProblem35.Config (n - m) d) :
+    Atlas.OpenQuantumProblem35.combineFirst m hm x y = OpenQuantumProblem35.combineFirst m hm x y := rfl
+example (n d m : ℕ) (hm : m ≤ n) (ψ : OpenQuantumProblem35.StateVector n d) :
+    Atlas.OpenQuantumProblem35.reducedDensityFirst m hm ψ = OpenQuantumProblem35.reducedDensityFirst m hm ψ := rfl
+example (m d : ℕ) : Atlas.OpenQuantumProblem35.maximallyMixed m d = OpenQuantumProblem35.maximallyMixed m d := rfl
+example (n d m : ℕ) (hm : m ≤ n) (ψ : OpenQuantumProblem35.StateVector n d) :
+    Atlas.OpenQuantumProblem35.HasMaximallyMixedFirstReduction m hm ψ
+      = OpenQuantumProblem35.HasMaximallyMixedFirstReduction m hm ψ := rfl
+example (n d : ℕ) (ψ : OpenQuantumProblem35.StateVector n d) : Atlas.OpenQuantumProblem35.IsAME ψ = OpenQuantumProblem35.IsAME ψ := rfl
+example (n d : ℕ) : Atlas.OpenQuantumProblem35.ExistsAME n d = OpenQuantumProblem35.ExistsAME n d := rfl
 
 
 /-! ## Check 2 — FC's statement, in FC's own vocabulary, closed by the Atlas term.

@@ -347,6 +347,12 @@ lemma q5Representative_certificate : ∀ R : Finset (Fin 10),
     rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl)
   all_goals exact of_decide_eq_true rfl
 
+-- The ℕ-valued and `ZMod 5`-valued forms of the graph agree after casting. simp
+-- would not push `Int.cast`/`Nat.cast` through the nested `ite`s here, but both
+-- sides are functions of two `Fin 10`s, so the identity is decidable outright.
+lemma q5GraphNat_cast : ∀ i j : Fin 10,
+    ((q5GraphNat i.1 j.1 : ℤ) : ZMod 5) = q5Graph i j := by decide
+
 lemma q5CutMatrix_det_of_certificate (A : Finset (Fin 10)) (hA : A.card = 5)
     (hcert : detFinFiveInt
       (q5MaskMatrix (fun i => decide (i ∈ A))) % 5 ≠ 0) :
@@ -358,8 +364,8 @@ lemma q5CutMatrix_det_of_certificate (A : Finset (Fin 10)) (hA : A.card = 5)
     change ((q5GraphNat (q5Select (fun i => decide (i ∈ A)) false i)
       (q5Select (fun i => decide (i ∈ A)) true j) : ℤ) : ZMod 5) = _
     rw [q5Select_not_mem A hA i, q5Select_mem A hA j]
-    simp [q5CutMatrix, q5GraphNat, q5Graph]
-    split_ifs <;> simp_all
+    simp only [q5CutMatrix]
+    exact q5GraphNat_cast _ _
   intro hz
   have hz' : ((M.det : ℤ) : ZMod 5) = 0 := by
     calc

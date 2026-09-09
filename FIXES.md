@@ -101,9 +101,21 @@ needed `map_smul, smul_eq_mul` in the simp set.
 
 ## Oqp35 — 3 fixes (two needed a second pass)
 
-1. In `q5CutMatrix_det_of_certificate`, the `Nat.cast` into `ZMod 5` no longer
-distributes over the nested `ite`s. Neither `apply_ite` nor `push_cast` fired, so the
-proof now case-splits instead: `split_ifs <;> simp_all`.
+1. In `q5CutMatrix_det_of_certificate`, the cast into `ZMod 5` no longer distributes
+over the nested `ite`s. Nothing tried would push it through — `apply_ite`,
+`push_cast`, `split_ifs`, `Nat.cast_ite` and `Int.cast_ite` all failed to fire (the
+matrix is over `ℤ`, so there are two stacked casts). Rather than keep guessing at the
+right simp lemma, the fix adds a bridging lemma and discharges it by decision
+procedure — both sides are functions of two `Fin 10`s, so the identity is finitely
+checkable:
+
+```lean
+lemma q5GraphNat_cast : ∀ i j : Fin 10,
+    ((q5GraphNat i.1 j.1 : ℤ) : ZMod 5) = q5Graph i j := by decide
+```
+
+This is `decide`, not `native_decide`: the latter would add `Lean.ofReduceBool` to the
+axiom list and defeat the point of the audit in `STATUS.md`.
 
 2. `Matrix.submatrix_apply` no longer reduces the submatrix application — the
 `Matrix.of` wrapper blocks it — leaving `Matrix.submatrix (fun i j ↦ …) ⇑pC ⇑pA i j`
@@ -112,8 +124,16 @@ directly instead: `simp only [Matrix.submatrix, Matrix.of_apply]`.
 
 3. `graphPhase_add`: `ring` treats each `∑` as an atom, so it could not see that the
 LHS and RHS summands differ only by commutativity (`x i * G i j * d j` versus
-`G i j * x i * d j`). Added `mul_comm, mul_assoc, mul_left_comm` to the preceding
-`simp_rw` to AC-normalise inside the binders first.
+`G i j * x i * d j`). Adding AC lemmas to the `simp_rw` did not work (`simp_rw`
+requires every rewrite to make progress, and they did not). Instead a `key` lemma
+normalises the right-hand summand to the left-hand orientation *before* summing:
+
+```lean
+have key : ∀ i j : Fin n, G i j * (x i * d j + d i * x j)
+    = x i * G i j * d j + d i * G i j * x j := by intro i j; ring
+simp_rw [key, mul_add, add_mul, Finset.sum_add_distrib]
+ring
+```
 
 ## Comparator-side notes (not changes to Atlas code)
 
