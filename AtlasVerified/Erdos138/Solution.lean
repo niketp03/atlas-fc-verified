@@ -584,6 +584,7 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
       intro i hi
       simp [Nat.ne_of_lt i.isLt]
     simp [hz, hP.coeff_natDegree]
+    exact hz
   · by_cases hlt : n < P.natDegree
     · have hs : (∑ i : Fin P.natDegree,
           if (i : ℕ) = n then -P.coeff i else 0) = -P.coeff n := by
@@ -595,7 +596,8 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
             exact hne (Fin.ext he)
           simp [hv]
         · simp
-      simp [hs, hn, Ne.symm hn]
+      simp [hn, Ne.symm hn]
+      exact neg_eq_of_eq_neg hs
     · have hgt : P.natDegree < n := by omega
       have hc : P.coeff n = 0 := Polynomial.coeff_eq_zero_of_natDegree_lt hgt
       have hz : (∑ i : Fin P.natDegree,
@@ -605,6 +607,7 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
         have hv : (i : ℕ) ≠ n := by omega
         simp [hv]
       simp [hz, hc, hn, Ne.symm hn]
+      exact hz
 
 noncomputable def recurrenceMap {R S : Type*} [CommRing R] [CommRing S]
     (f : R →+* S) (E : LinearRecurrence R) : LinearRecurrence S where
@@ -625,7 +628,7 @@ lemma linearMap_solution {R S : Type*} [CommRing R] [CommRing S]
   intro n
   have hh := congrArg L (h n)
   rw [map_sum] at hh
-  simp only [recurrenceMap, ← Algebra.smul_def] at hh
+  simp only [recurrenceMap, ← Algebra.smul_def, map_smul, smul_eq_mul] at hh
   exact hh
 
 lemma trace_mul_geom_solution {K F : Type*} [Field K] [Field F] [Algebra K F]

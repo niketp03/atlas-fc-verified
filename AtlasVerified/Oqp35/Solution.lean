@@ -358,7 +358,8 @@ lemma q5CutMatrix_det_of_certificate (A : Finset (Fin 10)) (hA : A.card = 5)
     change ((q5GraphNat (q5Select (fun i => decide (i ∈ A)) false i)
       (q5Select (fun i => decide (i ∈ A)) true j) : ℤ) : ZMod 5) = _
     rw [q5Select_not_mem A hA i, q5Select_mem A hA j]
-    simp [q5CutMatrix, q5GraphNat, q5Graph, apply_ite (Nat.cast (R := ZMod 5))]
+    simp [q5CutMatrix, q5GraphNat, q5Graph]
+    split_ifs <;> simp_all
   intro hz
   have hz' : ((M.det : ℤ) : ZMod 5) = 0 := by
     calc
@@ -415,7 +416,7 @@ lemma q5CutMatrix_det_map (A : Finset (Fin 10)) (hA : A.card = 5)
       (q5CutMatrix B hB).submatrix pC pA := by
     ext i j
     unfold q5CutMatrix
-    simp only [Matrix.submatrix_apply]
+    simp only [Matrix.submatrix, Matrix.of_apply]
     have hpA : (eB (pA j)).1 = g (eA j).1 := by
       change (eB (eB.symm ((finsetMapEquiv g A) (eA j)))).1 =
         ((finsetMapEquiv g A) (eA j)).1
@@ -632,9 +633,11 @@ lemma graphPhase_add {n p : ℕ} (G : Fin n → Fin n → ZMod p)
     graphPhase G (x + d) = graphPhase G x + graphPhase G d +
       ∑ i, ∑ j ∈ Finset.univ.filter (fun j : Fin n => i.1 < j.1),
         G i j * (x i * d j + d i * x j) := by
+  have key : ∀ i j : Fin n, G i j * (x i * d j + d i * x j)
+      = x i * G i j * d j + d i * G i j * x j := by
+    intro i j; ring
   simp only [graphPhase, Pi.add_apply]
-  simp_rw [mul_add, add_mul, Finset.sum_add_distrib, mul_comm, mul_assoc,
-    mul_left_comm]
+  simp_rw [key, mul_add, add_mul, Finset.sum_add_distrib]
   ring
 
 lemma q2Phase_sub (x y : Fin 9 → ZMod 2) :

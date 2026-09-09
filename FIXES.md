@@ -42,7 +42,7 @@ does. This was the only error in the file.
 `Finset.card_filter_add_card_filter_not`, with the same shape and the same named
 arguments (`s`, `p`).
 
-## OeisA108081 — 1 fix (6 sites)
+## OeisA108081 — 2 fixes (8 sites)
 
 `Relation.ReflTransGen.lift` changed shape. It used to take the chain as its last
 explicit argument; it now returns a relation inequality:
@@ -53,9 +53,14 @@ theorem ReflTransGen.lift {p : β → β → Prop} (f : α → β) (h : r ≤ (p
 ```
 
 So every call site needs the two endpoints supplied before the chain:
-`… lift f h hw` → `… lift f h _ _ hw`.
+`… lift f h hw` → `… lift f h _ _ hw`. The result then lands in `Function.onFun …`,
+so `Function.onFun` had to be added to the two surrounding `simpa` sets.
 
-## Erdos138 — 11 fixes
+`Finset.mem_antidiagonal` is now a field of the `Finset.HasAntidiagonal` class and no
+longer unifies at the call site; replaced with `have hij' : i + j = m := by simpa
+using hij`, which goes through the `@[simp]` form.
+
+## Erdos138 — 15 fixes
 
 1-2. `simp` no longer reduces `algebraMap (ZMod 2) K 0` to `0` (resp. `1` to `1`)
 after `fin_cases`. Replaced `simpa using hz.symm` with `rw [← hz]; exact map_zero _`
@@ -85,15 +90,25 @@ rather than a directly applicable `∀ x, …`, so `traceForm_nondegenerate K L 
 11. A `dsimp [M]` that now makes no progress (and so errors) was removed — `M` was
 already unfolded, so deleting it is semantics-preserving.
 
-## Oqp35 — 3 fixes
+12-14. Three of the repairs in 3–5 left the goal reduced to *exactly* the hypothesis
+(alpha-equivalent, differing only in the decidability instance that the pretty-printer
+hides), which `simp` still would not match. Closed with `exact hz` / `exact hz` and, in
+the third case, `exact neg_eq_of_eq_neg hs` — `exact` checks definitional equality, so
+the instance mismatch is irrelevant to it.
+
+15. In `linearMap_solution`, pushing the linear map `L` through the scalar action also
+needed `map_smul, smul_eq_mul` in the simp set.
+
+## Oqp35 — 3 fixes (two needed a second pass)
 
 1. In `q5CutMatrix_det_of_certificate`, the `Nat.cast` into `ZMod 5` no longer
-distributes over the nested `ite`s. Added `apply_ite (Nat.cast (R := ZMod 5))` to the
-simp set.
+distributes over the nested `ite`s. Neither `apply_ite` nor `push_cast` fired, so the
+proof now case-splits instead: `split_ifs <;> simp_all`.
 
-2. `dsimp only [Matrix.submatrix_apply]` no longer reduces the submatrix application,
-leaving `Matrix.submatrix (fun i j ↦ …) ⇑pC ⇑pA i j` unreduced so the following
-`rw [hpA, hpC]` found no match. Changed `dsimp only` to `simp only`.
+2. `Matrix.submatrix_apply` no longer reduces the submatrix application — the
+`Matrix.of` wrapper blocks it — leaving `Matrix.submatrix (fun i j ↦ …) ⇑pC ⇑pA i j`
+unreduced, so the following `rw [hpA, hpC]` found no match. Unfold the definition
+directly instead: `simp only [Matrix.submatrix, Matrix.of_apply]`.
 
 3. `graphPhase_add`: `ring` treats each `∑` as an atom, so it could not see that the
 LHS and RHS summands differ only by commutativity (`x i * G i j * d j` versus
@@ -113,3 +128,11 @@ stronger check than a textual diff — it would fail if the recurrences differed
 **Wotw314.** `largestInducedPathSize` is polymorphic in the vertex type, and stating
 the identity unapplied leaves `α` undetermined. The comparator states it applied to a
 graph instead.
+
+**OeisA108081.** `xN n = {w | XWord w ∧ w.length = n}` is textually identical on both
+sides, but `XWord` is an *inductive predicate* declared separately in each file, and
+two `inductive` declarations are distinct constants however identical their
+constructors. The comparator proves `Atlas.XWord w ↔ XWord w` by induction in both
+directions and derives `xN` equality from it. This is the check that actually matters
+for this problem: it establishes that the Atlas file's notion of an X-word is FC's,
+which no amount of `rfl` could have shown.

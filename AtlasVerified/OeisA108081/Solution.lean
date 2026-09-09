@@ -474,12 +474,12 @@ def CoordForestForm (root : EdgeCoord) (w : List EdgeCoord) : Prop :=
       (w.getLast?.map rightIndex = some (rightIndex root))
 
 lemma XInsert.toCoord {w : Word} (hw : XInsert w) : CoordInsert (coordWord w) := by
-  simpa [XInsert, CoordInsert, coordWord, edgeCoord] using
+  simpa [XInsert, CoordInsert, coordWord, edgeCoord, Function.onFun] using
     Relation.ReflTransGen.lift coordWord (fun _ _ h => h.toCoord) _ _ hw
 
 lemma CoordInsert.toXInsert {w : List EdgeCoord} (hw : CoordInsert w) :
     XInsert (w.map edgeValue) := by
-  simpa [XInsert, CoordInsert, edgeValue] using
+  simpa [XInsert, CoordInsert, edgeValue, Function.onFun] using
     Relation.ReflTransGen.lift (List.map edgeValue) (fun _ _ h => h.toExpand) _ _ hw
 
 lemma coordInsert_iff {w : Word} : CoordInsert (coordWord w) ↔ XInsert w := by
@@ -3168,7 +3168,7 @@ lemma coeff_suffix_mul_step_geometric (m : ℕ) :
   apply Finset.sum_congr rfl
   rintro ⟨i, j⟩ hij
   simp only [Prod.fst, Prod.snd]
-  have hij' := Finset.mem_antidiagonal.mp hij
+  have hij' : i + j = m := by simpa using hij
   rw [coeff_step_geometric_eq_fibTreePartial_le m j (by omega)]
 
 lemma coeff_suffix_mul_fibTree_term (m r : ℕ) :
