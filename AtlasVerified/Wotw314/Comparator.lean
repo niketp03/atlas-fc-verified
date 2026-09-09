@@ -21,7 +21,10 @@ namespace AtlasCompare.Wotw314
 
 /-! ## Check 1 — the shared definition agrees definitionally. -/
 
-example : Atlas.WrittenOnTheWallII.GraphConjecture314.largestInducedPathSize = WrittenOnTheWallII.GraphConjecture314.largestInducedPathSize := rfl
+-- Stated applied to a graph: unapplied, `α` is not determined by the equation.
+example (G : SimpleGraph α) [DecidableRel G.Adj] :
+    Atlas.WrittenOnTheWallII.GraphConjecture314.largestInducedPathSize G
+      = WrittenOnTheWallII.GraphConjecture314.largestInducedPathSize G := rfl
 
 
 /-! ## Check 2 — FC's statement, in FC's own vocabulary, closed by the Atlas term. -/

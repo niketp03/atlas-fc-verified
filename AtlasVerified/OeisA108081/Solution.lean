@@ -475,12 +475,12 @@ def CoordForestForm (root : EdgeCoord) (w : List EdgeCoord) : Prop :=
 
 lemma XInsert.toCoord {w : Word} (hw : XInsert w) : CoordInsert (coordWord w) := by
   simpa [XInsert, CoordInsert, coordWord, edgeCoord] using
-    Relation.ReflTransGen.lift coordWord (fun _ _ h => h.toCoord) hw
+    Relation.ReflTransGen.lift coordWord (fun _ _ h => h.toCoord) _ _ hw
 
 lemma CoordInsert.toXInsert {w : List EdgeCoord} (hw : CoordInsert w) :
     XInsert (w.map edgeValue) := by
   simpa [XInsert, CoordInsert, edgeValue] using
-    Relation.ReflTransGen.lift (List.map edgeValue) (fun _ _ h => h.toExpand) hw
+    Relation.ReflTransGen.lift (List.map edgeValue) (fun _ _ h => h.toExpand) _ _ hw
 
 lemma coordInsert_iff {w : Word} : CoordInsert (coordWord w) ↔ XInsert w := by
   constructor
@@ -499,15 +499,15 @@ lemma XInsert.expand {u v : Word} (hu : XInsert u) (h : Expand u v) : XInsert v 
 lemma expandStar_with_context {u v : Word} (h : Relation.ReflTransGen Expand u v)
     (p s : Word) : Relation.ReflTransGen Expand (p ++ u ++ s) (p ++ v ++ s) :=
   Relation.ReflTransGen.lift (fun w => p ++ w ++ s)
-    (fun _ _ h' => h'.with_context p s) h
+    (fun _ _ h' => h'.with_context p s) _ _ h
 
 lemma expandStar_map_l {u v : Word} (h : Relation.ReflTransGen Expand u v) :
     Relation.ReflTransGen Expand (l u) (l v) :=
-  Relation.ReflTransGen.lift l (fun _ _ h' => h'.map_l) h
+  Relation.ReflTransGen.lift l (fun _ _ h' => h'.map_l) _ _ h
 
 lemma expandStar_map_r {u v : Word} (h : Relation.ReflTransGen Expand u v) :
     Relation.ReflTransGen Expand (r u) (r v) :=
-  Relation.ReflTransGen.lift r (fun _ _ h' => h'.map_r) h
+  Relation.ReflTransGen.lift r (fun _ _ h' => h'.map_r) _ _ h
 
 lemma XWord.toXInsert {w : Word} (hw : XWord w) : XInsert w := by
   induction hw with
@@ -1545,7 +1545,7 @@ lemma coordExpandStar_with_context {u v : List EdgeCoord}
     (h : Relation.ReflTransGen CoordExpand u v) (p s : List EdgeCoord) :
     Relation.ReflTransGen CoordExpand (p ++ u ++ s) (p ++ v ++ s) :=
   Relation.ReflTransGen.lift (fun w => p ++ w ++ s)
-    (fun _ _ h' => h'.with_context p s) h
+    (fun _ _ h' => h'.with_context p s) _ _ h
 
 lemma CoordForest.before_root {root : EdgeCoord} {L : List EdgeCoord}
     (hL : CoordForest (coordLeft root) L) (p : List EdgeCoord) :

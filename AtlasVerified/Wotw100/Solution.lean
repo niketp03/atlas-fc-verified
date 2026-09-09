@@ -193,7 +193,7 @@ theorem conjecture100 (G : SimpleGraph α) [DecidableRel G.Adj] (h : G.Connected
     have hnon : ∀ v ∈ T,
         S.card - m ≤ (S.filter (fun s => ¬ G.Adj v s)).card := by
       intro v hv
-      have hp := Finset.filter_card_add_filter_neg_card_eq_card
+      have hp := Finset.card_filter_add_card_filter_not
         (s := S) (p := G.Adj v)
       have ha := hinter v
       omega
@@ -220,7 +220,7 @@ theorem conjecture100 (G : SimpleGraph α) [DecidableRel G.Adj] (h : G.Connected
         Finset.sum_le_sum fun s hs => hpoint s hs
   have houtside (v : α) (hv : v ∈ T) : S.card - m ≤ Gᶜ.degree v := by
     have hnon : S.card - m ≤ (S.filter (fun s => ¬ G.Adj v s)).card := by
-      have hp := Finset.filter_card_add_filter_neg_card_eq_card
+      have hp := Finset.card_filter_add_card_filter_not
         (s := S) (p := G.Adj v)
       have ha := hinter v
       omega

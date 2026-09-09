@@ -20,11 +20,11 @@ echo "===== start $(date +%H:%M:%S)"
 lake build "${TARGETS[@]}" > "$LOG/all.log" 2>&1
 echo "LAKE_EXIT=$?"
 echo "===== per-file errors ====="
-grep -oE "AtlasVerified/[A-Za-z0-9]+/[A-Za-z]+\.lean:[0-9]+:[0-9]+: error" "$LOG/all.log" \
-  | sed 's#AtlasVerified/##' | sort | uniq -c | sort -rn
+grep -oE "error: AtlasVerified/[A-Za-z0-9]+/[A-Za-z]+\.lean" "$LOG/all.log" \
+  | sed 's#error: AtlasVerified/##' | sort | uniq -c | sort -rn
 echo "===== files with zero errors ====="
 for d in Erdos138 Erdos337 Green25 OeisA108081 OeisA211417 OeisA22030 Oqp35 Wotw100 Wotw314; do
-  n=$(grep -cE "AtlasVerified/$d/[A-Za-z]+\.lean:[0-9]+:[0-9]+: error" "$LOG/all.log")
+  n=$(grep -cE "error: AtlasVerified/$d/[A-Za-z]+\.lean" "$LOG/all.log")
   printf "%-14s errors=%s\n" "$d" "$n"
 done
 echo "===== done $(date +%H:%M:%S)"

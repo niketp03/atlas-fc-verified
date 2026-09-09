@@ -544,13 +544,14 @@ lemma minpoly_primitiveBinaryUnit_pow_natDegree {p d : ℕ} (hp : Nat.Prime p)
     have hrange := minpoly.natDegree_eq_one_iff.mp hdeg
     rcases hrange with ⟨z, hz⟩
     fin_cases z
-    · have hzero : β = 0 := by simpa using hz.symm
+    · have hzero : β = 0 := by rw [← hz]; exact map_zero _
       have hne : β ≠ 0 := by
         dsimp [β]
         exact pow_ne_zero _ (Units.ne_zero _)
       exact hne hzero
     · apply hβ1
-      simpa using hz.symm
+      rw [← hz]
+      exact map_one _
   · exact hdeg
 
 lemma polynomial_coeff_finset_sum {R ι : Type*} [CommRing R] [DecidableEq ι]
@@ -582,8 +583,7 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
       apply Finset.sum_eq_zero
       intro i hi
       simp [Nat.ne_of_lt i.isLt]
-    rw [hz]
-    simp [hP.coeff_natDegree]
+    simp [hz, hP.coeff_natDegree]
   · by_cases hlt : n < P.natDegree
     · have hs : (∑ i : Fin P.natDegree,
           if (i : ℕ) = n then -P.coeff i else 0) = -P.coeff n := by
@@ -595,8 +595,7 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
             exact hne (Fin.ext he)
           simp [hv]
         · simp
-      rw [hs]
-      simp [hn, Ne.symm hn]
+      simp [hs, hn, Ne.symm hn]
     · have hgt : P.natDegree < n := by omega
       have hc : P.coeff n = 0 := Polynomial.coeff_eq_zero_of_natDegree_lt hgt
       have hz : (∑ i : Fin P.natDegree,
@@ -605,8 +604,7 @@ lemma recurrenceOfMonic_charPoly {R : Type*} [CommRing R] {P : Polynomial R}
         intro i hi
         have hv : (i : ℕ) ≠ n := by omega
         simp [hv]
-      rw [hz, hc]
-      simp [hn, Ne.symm hn]
+      simp [hz, hc, hn, Ne.symm hn]
 
 noncomputable def recurrenceMap {R S : Type*} [CommRing R] [CommRing S]
     (f : R →+* S) (E : LinearRecurrence R) : LinearRecurrence S where
@@ -618,6 +616,7 @@ lemma recurrenceMap_charPoly {R S : Type*} [CommRing R] [CommRing S]
     (recurrenceMap f E).charPoly = E.charPoly.map f := by
   rw [LinearRecurrence.charPoly, LinearRecurrence.charPoly]
   simp [recurrenceMap, Polynomial.map_sub, Polynomial.map_sum]
+  rfl
 
 lemma linearMap_solution {R S : Type*} [CommRing R] [CommRing S]
     [Algebra R S] (E : LinearRecurrence R) (u : ℕ → S)
@@ -626,7 +625,8 @@ lemma linearMap_solution {R S : Type*} [CommRing R] [CommRing S]
   intro n
   have hh := congrArg L (h n)
   rw [map_sum] at hh
-  simpa [recurrenceMap, ← Algebra.smul_def] using hh
+  simp only [recurrenceMap, ← Algebra.smul_def] at hh
+  exact hh
 
 lemma trace_mul_geom_solution {K F : Type*} [Field K] [Field F] [Algebra K F]
     [FiniteDimensional K F] (P : Polynomial K) (hP : P.Monic)
@@ -669,7 +669,7 @@ lemma combinedMinpoly_natDegree_le (S : Finset ℕ)
   · apply Finset.sum_le_sum
     intro p hp
     simpa [GaloisField.finrank 2 (hS p hp).ne_zero] using
-      (minpoly.natDegree_le (K := ZMod 2)
+      (minpoly.natDegree_le (A := ZMod 2)
         ((primitiveBinaryUnit p : BinaryGaloisField p) ^ d))
   · intro p hp
     exact minpoly.ne_zero (IsIntegral.of_finite (ZMod 2)
@@ -828,7 +828,7 @@ lemma componentDifference_nonzero_somewhere {p a d T : ℕ} (hp : Nat.Prime p)
     by_contra hn
     push_neg at hn
     apply hc
-    apply (traceForm_nondegenerate (ZMod 2) (BinaryGaloisField p) c)
+    apply (traceForm_nondegenerate (ZMod 2) (BinaryGaloisField p)).1 c
     intro b
     simpa only [Algebra.traceForm_apply] using hn b
   have hlin : LinearIndependent (ZMod 2)
@@ -994,7 +994,7 @@ lemma bad_coloring_from_prime_set {S : Finset ℕ} {k N : ℕ}
       simpa using x0.property
     have hx0lo := hp.1
     rw [hx0] at hx0lo
-    simpa using hx0lo
+    omega
   have hxMle : a + M * d ≤ N := by
     rw [← hxM]
     exact (Finset.mem_Icc.mp xM.property).2
@@ -1056,8 +1056,7 @@ theorem erdos_138.variants.dvd_two_pow :
         Nat.mul_le_mul_right (2 ^ (k - 3)) hcoef
       _ ≤ M * Q := Nat.mul_le_mul hMlow hQlow
   apply bad_coloring_from_prime_set hS (by simpa [M] using hMpos)
-  · dsimp [M]
-    rcases hsum with hsum | hsum <;> omega
+  · rcases hsum with hsum | hsum <;> omega
   · have hsub : (n + 1) * 2 ^ k - 1 ≤ M * Q :=
       (Nat.sub_le ((n + 1) * 2 ^ k) 1).trans hlarge
     simpa [M, Q] using hsub
