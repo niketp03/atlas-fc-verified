@@ -30,6 +30,7 @@ The comparators exist to close that gap.
 AtlasVerified/<Problem>/
     Solution.lean     the Atlas proof, namespace-renamed, with drift repairs
     Comparator.lean   the check against formal-conjectures
+Green25Improved/      a strengthening of Green 25 that answers FC's statement verbatim
 ```
 
 | Directory | Atlas namespace → | FC target |

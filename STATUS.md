@@ -1,6 +1,7 @@
 # Status
 
-Last full build: 2026-09-09, `lake build` exit 0, **zero errors across all 18 modules**.
+Last full build: 2026-09-10, `lake build` exit 0, **zero errors across all 22 modules**
+(18 under `AtlasVerified/`, 4 under `Green25Improved/`).
 
 Toolchain: `leanprover/lean4:v4.33.1`, Mathlib as pinned by formal-conjectures
 (`v4.33.1`). Regenerate with `./scripts/build_all.sh`, then `./scripts/status.sh`.
@@ -44,8 +45,10 @@ caveats are recorded in the comparators themselves:
   choice, and it is stated explicitly in each comparator.
 - **Green25** deviates from FC's `let ans := answer(sorry)` by using
   `∃ candidateAnswer`, which is weaker in FC's idiom. Its comparator states the Atlas
-  shape and says so. (Separately, the bound this construction reaches can be improved
-  from `N/(log N)²` to `N·exp(−c√(log N))`; that work lives outside this repo.)
+  shape and says so. That deviation is now closed: `Green25Improved/` names the answer
+  function and discharges FC's statement verbatim, and in the course of doing so
+  improves the bound from `N/(log N)²` to `N/exp(√(log N)/16)` — below every
+  polylogarithmic rate. See `Green25Improved/README.md`.
 
 ## Checks that needed a proof rather than `rfl`
 
