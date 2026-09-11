@@ -1,0 +1,12 @@
+id = "wotw100_conjecture100"
+title = "Written on the Wall II, Conjecture 100"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.Wotw100"
+holes = ["wotw100_conjecture100"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures WrittenOnTheWallII/GraphConjecture100.lean; degreeL2Norm and indepNeighborsCard vendored from FormalConjecturesForMathlib. Solution derived from facebookresearch/atlas-lean."
+source = "http://cms.uhd.edu/faculty/delavinae/research/wowII/all.html#conj100"

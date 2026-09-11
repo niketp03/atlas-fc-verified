@@ -1,0 +1,12 @@
+id = "oeis_a211417_supercongruence"
+title = "OEIS A211417 supercongruence"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.OeisA211417"
+holes = ["oeis_a211417_supercongruence"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures OEIS/211417.lean. Solution derived from facebookresearch/atlas-lean."
+source = "https://oeis.org/A211417 ; Peter Bala, Jan 24 2020"

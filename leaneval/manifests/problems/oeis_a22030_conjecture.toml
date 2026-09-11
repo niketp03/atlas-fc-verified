@@ -1,0 +1,12 @@
+id = "oeis_a22030_conjecture"
+title = "OEIS A022030 satisfies a linear recurrence"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.OeisA22030"
+holes = ["oeis_a22030_conjecture"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures FormalConjectures/OEIS/22030.lean (OeisA22030.conjecture). Solution derived from facebookresearch/atlas-lean Atlas/FC/OeisA22030_conjecture.lean."
+source = "https://oeis.org/A022030 ; conjecture by Colin Barker, Feb 16 2012"

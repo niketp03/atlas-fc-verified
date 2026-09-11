@@ -1,0 +1,12 @@
+id = "erdos_138_dvd_two_pow"
+title = "Erdos 138: W(k)/2^k tends to infinity"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.Erdos138"
+holes = ["erdos_138_dvd_two_pow"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures ErdosProblems/138.lean (erdos_138.variants.dvd_two_pow), with FC's answer(sorry) wrapper dropped and the right-hand side stated directly -- see the module docstring. AP vocabulary vendored from FormalConjecturesForMathlib Combinatorics/AP/Basic.lean. Solution derived from facebookresearch/atlas-lean."
+source = "https://www.erdosproblems.com/138"

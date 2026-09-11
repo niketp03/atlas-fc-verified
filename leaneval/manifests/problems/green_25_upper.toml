@@ -1,0 +1,12 @@
+id = "green_25_upper"
+title = "Green's Open Problem 25, upper bound"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.Green25"
+holes = ["green_25_upper"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures GreensOpenProblems/25.lean (green_25.upper), with FC's answer(sorry) slot closed existentially -- see the module docstring. restrictedSumset vendored from FormalConjecturesForMathlib. Solution derived from facebookresearch/atlas-lean; a strictly stronger bound is available in this repository's Green25Improved/."
+source = "https://people.maths.ox.ac.uk/greenbj/papers/open-problems.pdf#problem.25"

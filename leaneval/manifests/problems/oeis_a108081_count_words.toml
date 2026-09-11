@@ -1,0 +1,12 @@
+id = "oeis_a108081_count_words"
+title = "OEIS A108081 counts X-words"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.OeisA108081"
+holes = ["oeis_a108081_count_words"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures OEIS/108081.lean, including the XWord inductive predicate. Solution derived from facebookresearch/atlas-lean."
+source = "https://oeis.org/A108081"

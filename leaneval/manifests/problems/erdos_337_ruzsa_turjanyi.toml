@@ -1,0 +1,12 @@
+id = "erdos_337_ruzsa_turjanyi"
+title = "Erdos 337, Ruzsa-Turjanyi variant"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.Erdos337"
+holes = ["erdos_337_ruzsa_turjanyi"]
+submitter = "Niket Patel"
+notes = "Statement vendored from google-deepmind/formal-conjectures ErdosProblems/337.lean; Set.IsAsymptoticAddBasis vendored via its to_additive source pair from FormalConjecturesForMathlib Combinatorics/Additive/Basis.lean. Solution derived from facebookresearch/atlas-lean."
+source = "Erdos Problem 337; Ruzsa and Turjanyi [RT85]"

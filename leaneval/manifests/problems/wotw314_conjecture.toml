@@ -1,0 +1,12 @@
+id = "wotw314_conjecture"
+title = "Written on the Wall II, Conjecture 314"
+group = "formalization-evaluation"
+status = "draft"
+visible = true
+statement_revision = 1
+tags = []
+module = "LeanEval.FormalConjectures.Wotw314"
+holes = ["wotw314_conjecture"]
+submitter = "Niket Patel"
+notes = "Statement and supporting definitions vendored from google-deepmind/formal-conjectures (WrittenOnTheWallII/GraphConjecture314.lean and FormalConjecturesForMathlib WellTotallyDominated.lean). Solution derived from facebookresearch/atlas-lean."
+source = "http://cms.dt.uh.edu/faculty/delavinae/research/wowII/"
