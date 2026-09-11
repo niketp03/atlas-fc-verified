@@ -5,8 +5,6 @@ The nine `Atlas/FC/` Lean files from [`facebookresearch/atlas-lean`][atlas]
 **comparator** that checks the proof actually discharges the statement
 [`google-deepmind/formal-conjectures`][fc] records.
 
-Local repository — nothing here is pushed anywhere.
-
 [atlas]: https://github.com/facebookresearch/atlas-lean
 [fc]: https://github.com/google-deepmind/formal-conjectures
 
@@ -100,3 +98,16 @@ curl cannot find the system CA store).
 A symlink into the checkout does **not** work — lake hangs indefinitely on a
 symlinked directory in the package root — so `sync.sh` makes a real copy. The repo
 stays the source of truth; edit here, then build.
+
+## Licence and provenance
+
+The nine `Solution.lean` files are derivative works of `Atlas/FC/` in
+[`facebookresearch/atlas-lean`][atlas] (Apache 2.0, © Meta Platforms, Inc.). Each
+carries its original copyright header, and a provenance banner naming the upstream
+file and commit; `FIXES.md` lists every change. Upstream's licence is reproduced
+verbatim in `LICENSE`, including the use restriction it prepends to Apache 2.0.
+
+The `Comparator.lean` files, the scripts, and the three markdown documents are my
+own work, offered under the same terms.
+
+This repository is not affiliated with or endorsed by Meta or Google DeepMind.
