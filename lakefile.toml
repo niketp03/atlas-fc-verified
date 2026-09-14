@@ -1,0 +1,14 @@
+name = "atlas_fc_solutions"
+defaultTargets = ["AtlasFCSolutions"]
+
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "formal_conjectures"
+git = "https://github.com/google-deepmind/formal-conjectures.git"
+rev = "990d209a1ffbe75e59e11267242675931f524824"
+
+[[lean_lib]]
+name = "AtlasFCSolutions"

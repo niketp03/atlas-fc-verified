@@ -1,5 +1,1 @@
-.lake/
-*.olean
-*.ilean
-*.trace
-build-logs/
+/.lake
